@@ -28,6 +28,7 @@
         snap: innerWidth <= 720 ? {
           snapTo: v => pontosDeEncaixe().reduce((a, b) => (Math.abs(b - v) < Math.abs(a - v) ? b : a)),
           duration: { min: 0.2, max: 0.5 }, delay: 0.08, ease: 'power2.inOut',
+          inertia: false, // sem projetar pela velocidade: rolagem rápida pulava várias fotos
         } : false,
       },
     });
