@@ -43,7 +43,8 @@ const sol = new THREE.DirectionalLight(0xfff1dc, 2.8);
 scene.add(sol, sol.target);
 
 function redimensionar() {
-  const w = innerWidth, h = innerHeight;
+  // tamanho real do canvas (innerWidth inclui a barra de rolagem e deslocava o prédio)
+  const w = canvas.clientWidth || innerWidth, h = canvas.clientHeight || innerHeight;
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
@@ -262,11 +263,13 @@ function quadro(p) {
 }
 // Área livre da tela onde o prédio deve caber (frações da largura/altura) e onde fica o centro dela
 function areaLivre() {
-  if (camera.aspect < 1) return { fw: 0.92, fh: 0.5, cx: 0.5, cy: 0.36 };   // celular: prédio acima do texto
+  if (camera.aspect < 1) return { fw: 0.94, fh: 0.48, cx: 0.5, cy: 0.38 };   // celular: prédio acima do texto
   return { fw: 0.5, fh: 0.78, cx: 0.6, cy: 0.5 };                          // desktop: entre o texto e a régua
 }
 function posicionarCamera(p) {
-  const [az, el, zoom, ty] = CAM_FIXA ?? quadro(p);
+  const [az, el, zoomQ, ty] = CAM_FIXA ?? quadro(p);
+  // em tela em pé o prédio comprido não cabe com o zoom do desktop: no máximo o enquadramento completo
+  const zoom = camera.aspect < 1 ? Math.min(zoomQ, 1.0) : zoomQ;
   const { fw, fh, cx, cy } = areaLivre();
   // distância para a esfera que envolve o prédio caber na área livre
   const vMeia = THREE.MathUtils.degToRad(camera.fov / 2);
@@ -281,8 +284,10 @@ function posicionarCamera(p) {
     alvoCam.z + Math.cos(azR) * Math.cos(elR) * dist
   );
   camera.lookAt(alvoCam);
+  // neblina relativa à câmera: no celular a câmera fica bem mais longe e o prédio sumia na neblina
+  if (scene.fog) { scene.fog.near = dist + raio * 0.6; scene.fog.far = dist + raio * 3.2; }
   // desloca a janela para o prédio ficar no centro da área livre
-  const w = innerWidth, h = innerHeight;
+  const w = canvas.clientWidth || innerWidth, h = canvas.clientHeight || innerHeight;
   camera.setViewOffset(w, h, -(cx - 0.5) * w, -(cy - 0.5) * h, w, h);
 }
 
