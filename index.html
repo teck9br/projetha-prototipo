@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow"> <!-- protótipo para o cliente: fora do Google -->
+  <title>Projetha | Construtora de escolas</title>
+  <meta name="description" content="A Projetha constrói escolas e colégios, do projeto à entrega da chave.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/models/colegio.glb?v=38" as="fetch" crossorigin>
+  <link rel="preload" href="assets/models/estrutura.glb?v=34" as="fetch" crossorigin>
+  <link rel="icon" href="assets/img/marca/projetha-icone.png">
+  <link rel="stylesheet" href="css/style.css?v=42">
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    } }
+  </script>
+</head>
+<body>
+  <header class="topo">
+    <a class="marca" href="#">
+      <img src="assets/img/marca/projetha-icone.png" alt="" width="34" height="34">
+      <span>Projetha <em>Engenharia</em></span>
+    </a>
+    <nav>
+      <a href="#ambientes">Ambientes</a>
+      <a href="#contato">Contato</a>
+      <a class="nav-cta" href="#contato">Orçar uma escola</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO: o colégio sobe conforme a rolagem -->
+    <section id="obra" class="obra">
+      <div class="palco">
+        <canvas id="cena" aria-label="Modelo 3D de um colégio sendo construído pavimento por pavimento"></canvas>
+
+        <div class="carregando" id="carregando">
+          <span>Carregando o modelo</span>
+          <div class="barra"><i id="barra"></i></div>
+        </div>
+
+        <div class="abertura" data-fase="intro">
+          <h1>Escola de pé,<br>do terreno à cobertura.</h1>
+          <p>A Projetha constrói colégios. Role a página e acompanhe uma das nossas obras subir, andar por andar, a partir do modelo real do projeto.</p>
+          <span class="dica">
+            <svg width="14" height="22" viewBox="0 0 14 22" aria-hidden="true"><rect x="1" y="1" width="12" height="20" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/><line class="dica-ponto" x1="7" y1="5" x2="7" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Role para construir
+          </span>
+        </div>
+
+        <div class="legendas" aria-live="polite">
+          <article data-fase="1"><h2>Subsolo</h2><p>Garagem e áreas técnicas enterradas. É a parte da obra que ninguém vê depois, e a que mais exige cálculo.</p></article>
+          <article data-fase="2"><h2>Térreo</h2><p>Entrada, pátio central e as primeiras salas. É por aqui que o aluno chega todos os dias.</p></article>
+          <article data-fase="3"><h2>1º andar</h2><p>A estrutura metálica sobe na frente. Lajes, paredes e esquadrias vêm atrás, cada etapa liberada pela anterior.</p></article>
+          <article data-fase="4"><h2>2º andar</h2><p>Salas empilhadas na mesma prumada deixam as instalações alinhadas e a manutenção mais simples.</p></article>
+          <article data-fase="5"><h2>3º andar</h2><p>Fachada de vidro e as faixas coloridas que dão cara à escola entram na reta final.</p></article>
+          <article data-fase="6"><h2>Galeria</h2><p>O nível da galeria, sobre o auditório.</p></article>
+          <article data-fase="7"><h2>Cobertura</h2><p>Telhado e reservatório. O prédio está fechado.</p></article>
+          <article data-fase="fim" class="fim">
+            <h2>Pronta para receber alunos.</h2>
+            <p>Colégio Adventista, Natal/RN. Ao entardecer, as salas acendem na temperatura de cor do projeto luminotécnico: 4000 K.</p>
+            <a class="botao" href="#contato">Quero construir uma escola</a>
+          </article>
+        </div>
+
+        <aside class="regua" aria-hidden="true">
+          <div class="regua-trilho"><i class="regua-nivel" id="reguaNivel"></i></div>
+          <ol id="reguaMarcas"></ol>
+        </aside>
+
+        <div class="cota" aria-hidden="true">
+          <span class="cota-rotulo">Cota</span>
+          <span class="cota-valor" id="cotaValor">±0,00 m</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- AMBIENTES: perspectivas do projeto de interiores, rolagem horizontal -->
+    <section id="ambientes" class="ambientes">
+      <div class="amb-trilho">
+        <header class="amb-intro">
+          <h2>Por dentro<br>da escola.</h2>
+          <p>Os ambientes do Colégio Adventista de Natal, do auditório à brinquedoteca. Perspectivas do projeto de interiores da Veneziano Arquitetura.</p>
+        </header>
+          <figure class="amb">
+            <img src="assets/img/ambientes/fachada-800.webp" srcset="assets/img/ambientes/fachada-800.webp 800w, assets/img/ambientes/fachada.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Fachada: ACM grafite, pele de vidro e as faixas da marca." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">01</span><strong>Fachada</strong><span>ACM grafite, pele de vidro e as faixas da marca.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/entrada-800.webp" srcset="assets/img/ambientes/entrada-800.webp 800w, assets/img/ambientes/entrada.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Entrada principal: Catracas, recepção e área de espera." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">02</span><strong>Entrada principal</strong><span>Catracas, recepção e área de espera.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/auditorio-800.webp" srcset="assets/img/ambientes/auditorio-800.webp 800w, assets/img/ambientes/auditorio.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Auditório: Plateia em dois níveis, com galeria superior." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">03</span><strong>Auditório</strong><span>Plateia em dois níveis, com galeria superior.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/e-class-800.webp" srcset="assets/img/ambientes/e-class-800.webp 800w, assets/img/ambientes/e-class.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="E-class: Biblioteca e mesas de estudo em grupo." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">04</span><strong>E-class</strong><span>Biblioteca e mesas de estudo em grupo.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/maker-800.webp" srcset="assets/img/ambientes/maker-800.webp 800w, assets/img/ambientes/maker.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Espaço maker: Bancadas e ferramentas para projetos." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">05</span><strong>Espaço maker</strong><span>Bancadas e ferramentas para projetos.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/laboratorio-800.webp" srcset="assets/img/ambientes/laboratorio-800.webp 800w, assets/img/ambientes/laboratorio.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Laboratório: Aulas práticas com luz natural." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">06</span><strong>Laboratório</strong><span>Aulas práticas com luz natural.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/arena-gamer-800.webp" srcset="assets/img/ambientes/arena-gamer-800.webp 800w, assets/img/ambientes/arena-gamer.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Arena gamer: Computadores e telão para jogos e aulas de tecnologia." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">07</span><strong>Arena gamer</strong><span>Computadores e telão para jogos e aulas de tecnologia.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/quadra-800.webp" srcset="assets/img/ambientes/quadra-800.webp 800w, assets/img/ambientes/quadra.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Quadra coberta: Poliesportiva, com tabelas e traves." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">08</span><strong>Quadra coberta</strong><span>Poliesportiva, com tabelas e traves.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/musica-800.webp" srcset="assets/img/ambientes/musica-800.webp 800w, assets/img/ambientes/musica.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Sala de música: Instrumentos à mão e espaço para ensaio." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">09</span><strong>Sala de música</strong><span>Instrumentos à mão e espaço para ensaio.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/sala-infantil-800.webp" srcset="assets/img/ambientes/sala-infantil-800.webp 800w, assets/img/ambientes/sala-infantil.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Sala do infantil: Mesas baixas e mobiliário na altura das crianças." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">10</span><strong>Sala do infantil</strong><span>Mesas baixas e mobiliário na altura das crianças.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/brinquedoteca-800.webp" srcset="assets/img/ambientes/brinquedoteca-800.webp 800w, assets/img/ambientes/brinquedoteca.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Brinquedoteca: Circuito de brincar e piscina de bolinhas." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">11</span><strong>Brinquedoteca</strong><span>Circuito de brincar e piscina de bolinhas.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/soninho-800.webp" srcset="assets/img/ambientes/soninho-800.webp 800w, assets/img/ambientes/soninho.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Soninho: Sala de descanso do infantil." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">12</span><strong>Soninho</strong><span>Sala de descanso do infantil.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/master-chef-800.webp" srcset="assets/img/ambientes/master-chef-800.webp 800w, assets/img/ambientes/master-chef.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Master chef: Cozinha pedagógica." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">13</span><strong>Master chef</strong><span>Cozinha pedagógica.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/missoes-800.webp" srcset="assets/img/ambientes/missoes-800.webp 800w, assets/img/ambientes/missoes.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Agência de missões: Espaço de convivência e projetos." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">14</span><strong>Agência de missões</strong><span>Espaço de convivência e projetos.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/casa-arvore-800.webp" srcset="assets/img/ambientes/casa-arvore-800.webp 800w, assets/img/ambientes/casa-arvore.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Casa da árvore: Pátio verde com playground." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">15</span><strong>Casa da árvore</strong><span>Pátio verde com playground.</span></figcaption>
+          </figure>
+          <figure class="amb">
+            <img src="assets/img/ambientes/parque-aquatico-800.webp" srcset="assets/img/ambientes/parque-aquatico-800.webp 800w, assets/img/ambientes/parque-aquatico.webp 1600w" sizes="(max-width: 720px) 86vw, 52vw" alt="Parque aquático: Área molhada para os pequenos." loading="lazy" decoding="async" width="1600" height="900">
+            <figcaption><span class="amb-n">16</span><strong>Parque aquático</strong><span>Área molhada para os pequenos.</span></figcaption>
+          </figure>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato" class="contato">
+      <h2>Vai construir ou ampliar uma escola?</h2>
+      <p>Conte o que a sua rede precisa e fale direto com a equipe de engenharia.</p>
+      <ul class="contato-lista">
+        <li><span>E-mail</span><a href="mailto:contato@projethaengenharia.com.br">contato@projethaengenharia.com.br</a></li>
+        <li><span>Telefone</span><a href="tel:+554133791667">(41) 3379-1667</a></li>
+        <li><span>Instagram</span><a href="https://instagram.com/projetha.eng" target="_blank" rel="noopener">@projetha.eng</a></li>
+        <li><span>Sede</span>Rua Vênus, 462, Curitiba/PR</li>
+      </ul>
+    </section>
+
+    <footer class="rodape">
+      <img src="assets/img/marca/projetha-icone.png" alt="" width="28" height="28">
+      <span>Projetha Engenharia</span>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script type="module" src="js/hero.js?v=43"></script>
+  <script src="js/ambientes.js?v=34" defer></script>
+</body>
+</html>
