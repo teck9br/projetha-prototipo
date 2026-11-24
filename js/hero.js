@@ -268,13 +268,13 @@ function quadro(p) {
 }
 // Área livre da tela onde o prédio deve caber (frações da largura/altura) e onde fica o centro dela
 function areaLivre() {
-  if (camera.aspect < 1) return { fw: 0.94, fh: 0.48, cx: 0.5, cy: 0.38 };   // celular: prédio acima do texto
+  if (camera.aspect < 1) return { fw: 0.98, fh: 0.54, cx: 0.5, cy: 0.37 };   // celular: prédio acima do texto
   return { fw: 0.5, fh: 0.78, cx: 0.6, cy: 0.5 };                          // desktop: entre o texto e a régua
 }
 function posicionarCamera(p) {
   const [az, el, zoomQ, ty] = CAM_FIXA ?? quadro(p);
-  // em tela em pé o prédio comprido não cabe com o zoom do desktop: no máximo o enquadramento completo
-  const zoom = camera.aspect < 1 ? Math.min(zoomQ, 1.0) : zoomQ;
+  // câmera mais perto (pedido do Ruan): no celular o prédio pode passar um pouco das bordas laterais
+  const zoom = zoomQ * (camera.aspect < 1 ? 0.9 : 1.12);
   const { fw, fh, cx, cy } = areaLivre();
   // distância para a esfera que envolve o prédio caber na área livre
   const vMeia = THREE.MathUtils.degToRad(camera.fov / 2);
