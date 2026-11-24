@@ -1,5 +1,5 @@
-// Ambientes: no desktop a seção fica fixa e o trilho de imagens anda na horizontal com a rolagem.
-// No celular é um carrossel nativo com scroll-snap (CSS), sem pin.
+// Ambientes: a seção fica fixa e o trilho de imagens anda na horizontal com a rolagem
+// (desktop e celular). Com "reduzir movimento" ligado, vira carrossel nativo com scroll-snap.
 (function () {
   const { gsap, ScrollTrigger } = window;
   gsap.registerPlugin(ScrollTrigger);
@@ -7,7 +7,8 @@
   const trilho = secao.querySelector('.amb-trilho');
   const distancia = () => Math.max(0, trilho.scrollWidth - innerWidth);
 
-  gsap.matchMedia().add('(min-width: 721px) and (prefers-reduced-motion: no-preference)', () => {
+  // também no celular: rolar para baixo move as fotos para o lado (o arrastar lateral passava despercebido)
+  gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
     gsap.to(trilho, {
       x: () => -distancia(),
       ease: 'none',

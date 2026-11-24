@@ -197,13 +197,18 @@ a { color: inherit; }
 .amb figcaption span:last-child { grid-column: 2; color: var(--texto-2); font-size: .92rem; }
 .amb-n { grid-row: span 2; font: 500 .8rem/1.6 var(--mono); color: var(--sinal); }
 
-@media (max-width: 720px), (prefers-reduced-motion: reduce) {
-  .ambientes { overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+@media (max-width: 720px) {
+  /* celular: mesmo efeito do desktop (rolagem vertical move o trilho), com cartões maiores */
+  .amb-trilho { gap: 14px; padding: 0 20px; }
+  .amb-intro { flex-basis: 80vw; padding-right: 0; }
+  .amb, .amb:nth-of-type(3n+2) { width: 84vw; }
+  .amb:nth-of-type(3n+2) img { aspect-ratio: 4 / 5; }
+  .amb img { width: 108%; margin-left: -4%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ambientes { overflow-x: auto; scroll-snap-type: x mandatory; }
   .amb-trilho { height: auto; padding-block: 96px 64px; align-items: flex-start; }
-  .amb-intro { flex-basis: 78vw; scroll-snap-align: start; }
-  .amb, .amb:nth-of-type(3n+2) { width: 82vw; scroll-snap-align: center; }
-  .amb:nth-of-type(3n+2) img { aspect-ratio: 16 / 9; }
-  .amb img { width: 100%; margin-left: 0; }
+  .amb, .amb-intro { scroll-snap-align: center; }
 }
 
 .contato {

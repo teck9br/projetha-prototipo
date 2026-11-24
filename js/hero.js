@@ -12,6 +12,8 @@ const { gsap, ScrollTrigger, Lenis } = window;
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 scrollTo(0, 0);
 gsap.registerPlugin(ScrollTrigger);
+// no celular a barra de endereço some/aparece ao rolar: não recalcular tudo por isso (dava pulos)
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 const MOBILE = matchMedia('(max-width: 720px)').matches;
 const REDUZIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -25,8 +27,11 @@ const FOLGA_FINAL = 4; // o nível passa do topo para todas as categorias fechar
 
 // ---------- Renderer e cena ----------
 const canvas = document.getElementById('cena');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(devicePixelRatio, MOBILE ? 1.25 : 1.75));
+// Qualidade: antialiasing sempre e até 2x de densidade (celular a 1,25x sem AA ficava borrado e serrilhado).
+// Se o aparelho não aguentar, a resolução cai sozinha (ver qualidadeAdaptativa).
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+let densidade = Math.min(devicePixelRatio, 2);
+renderer.setPixelRatio(densidade);
 renderer.toneMapping = THREE.NeutralToneMapping;
 renderer.toneMappingExposure = 1.0;
 renderer.localClippingEnabled = true;
@@ -384,6 +389,22 @@ function entardecer(p) {
   });
 }
 
+// ---------- Qualidade adaptativa ----------
+// Mede o tempo médio de quadro; abaixo de ~30 fps por 2 s, reduz a densidade em 0,25x (mínimo 1x).
+let ultimo = performance.now(), somaQuadros = 0, nQuadros = 0;
+function qualidadeAdaptativa() {
+  const agora = performance.now(), dt = agora - ultimo; ultimo = agora;
+  if (dt > 250) return; // aba em segundo plano
+  somaQuadros += dt; nQuadros++;
+  if (somaQuadros < 2000) return;
+  const media = somaQuadros / nQuadros; somaQuadros = 0; nQuadros = 0;
+  if (media > 33 && densidade > 1) {
+    densidade = Math.max(1, densidade - 0.25);
+    renderer.setPixelRatio(densidade);
+    redimensionar();
+  }
+}
+
 // ---------- Rolagem ----------
 function aplicar(p) {
   const prog = THREE.MathUtils.clamp((p - 0.05) / 0.82, 0, 1);
@@ -425,7 +446,7 @@ function iniciarRolagem() {
 
   // redimensionar a janela recalcula o enquadramento na hora (antes só ao rolar)
   addEventListener('resize', () => aplicar(estado.p));
-  gsap.ticker.add(() => renderer.render(scene, camera));
+  gsap.ticker.add(() => { renderer.render(scene, camera); qualidadeAdaptativa(); });
   ScrollTrigger.sort();
   ScrollTrigger.refresh();
 }
