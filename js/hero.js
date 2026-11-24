@@ -268,7 +268,7 @@ function quadro(p) {
 }
 // Área livre da tela onde o prédio deve caber (frações da largura/altura) e onde fica o centro dela
 function areaLivre() {
-  if (camera.aspect < 1) return { fw: 0.98, fh: 0.54, cx: 0.5, cy: 0.37 };   // celular: prédio acima do texto
+  if (camera.aspect < 1) return { fw: 0.98, fh: 0.58, cx: 0.5, cy: 0.42 };   // celular: prédio acima do texto
   return { fw: 0.5, fh: 0.78, cx: 0.6, cy: 0.5 };                          // desktop: entre o texto e a régua
 }
 function posicionarCamera(p) {
